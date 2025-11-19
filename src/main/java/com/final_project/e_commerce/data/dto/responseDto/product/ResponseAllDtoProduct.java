@@ -5,11 +5,13 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class ResponseDtoProduct {
+public class ResponseAllDtoProduct {
     private Integer pid;
     private String name;
     private BigDecimal price;
     private String imageUrl;
     private String description;
-    private Integer stock;
+    private Boolean hasStock;
+
+
 }

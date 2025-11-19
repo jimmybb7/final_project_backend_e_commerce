@@ -1,6 +1,7 @@
 package com.final_project.e_commerce.mapper.product;
 
 import com.final_project.e_commerce.data.domainData.responseDomainData.product.ResponseProductDomainData;
+import com.final_project.e_commerce.data.dto.responseDto.product.ResponseAllDtoProduct;
 import com.final_project.e_commerce.data.dto.responseDto.product.ResponseDtoProduct;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import java.util.List;
 @Component
 public class ChangeToDtoProductTesting {
 
-    public ResponseDtoProduct changeProductDomainToResponseDtoSingle(ResponseProductDomainData responseProductDomainData) {
+    public ResponseDtoProduct changeProductDomainToResponseDtoById(ResponseProductDomainData responseProductDomainData) {
         ResponseDtoProduct responseDtoProduct = new ResponseDtoProduct();
         responseDtoProduct.setImageUrl(responseProductDomainData.getImageUrl());
         responseDtoProduct.setName(responseProductDomainData.getName());
@@ -21,26 +22,26 @@ public class ChangeToDtoProductTesting {
         return responseDtoProduct;
     }
 
-    public List<ResponseDtoProduct> changeProductDomainToResponseDtoList(List<ResponseProductDomainData> responseProductDomainDataList) {
-        List<ResponseDtoProduct> responseDtoProductList = new ArrayList<>();
+    public List<ResponseAllDtoProduct> changeProductDomainToResponseDtoList(List<ResponseProductDomainData> responseProductDomainDataList) {
+        List<ResponseAllDtoProduct> responseAllDtoProductList = new ArrayList<>();
         for (ResponseProductDomainData responseProductDomainData : responseProductDomainDataList) {
-            responseDtoProductList.add(changeProductDomainToResponseDtoForList(responseProductDomainData));
+            responseAllDtoProductList.add(changeProductDomainToResponseDtoForList(responseProductDomainData));
         }
-        return responseDtoProductList;
+        return responseAllDtoProductList;
     }
 
-    public ResponseDtoProduct changeProductDomainToResponseDtoForList(ResponseProductDomainData responseProductDomainData) {
-        ResponseDtoProduct responseDtoProduct = new ResponseDtoProduct();
+    public ResponseAllDtoProduct changeProductDomainToResponseDtoForList(ResponseProductDomainData responseProductDomainData) {
+        ResponseAllDtoProduct responseAllDtoProduct = new ResponseAllDtoProduct();
         if (responseProductDomainData.getStock() > 0) {
-            responseDtoProduct.setHasStock(true);
+            responseAllDtoProduct.setHasStock(true);
         } else {
-            responseDtoProduct.setHasStock(false);
+            responseAllDtoProduct.setHasStock(false);
         }
-        responseDtoProduct.setImageUrl(responseProductDomainData.getImageUrl());
-        responseDtoProduct.setName(responseProductDomainData.getName());
-        responseDtoProduct.setPrice(responseProductDomainData.getPrice());
-        responseDtoProduct.setPid(responseProductDomainData.getPid());
-        responseDtoProduct.setDescription(responseProductDomainData.getDescription());
-        return responseDtoProduct;
+        responseAllDtoProduct.setImageUrl(responseProductDomainData.getImageUrl());
+        responseAllDtoProduct.setName(responseProductDomainData.getName());
+        responseAllDtoProduct.setPrice(responseProductDomainData.getPrice());
+        responseAllDtoProduct.setPid(responseProductDomainData.getPid());
+        responseAllDtoProduct.setDescription(responseProductDomainData.getDescription());
+        return responseAllDtoProduct;
     }
 }

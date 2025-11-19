@@ -1,13 +1,6 @@
 package com.final_project.e_commerce.mapper.product;
 
-import com.final_project.e_commerce.data.domainData.responseDomainData.product.ResponseProductDomainData;
-import com.final_project.e_commerce.data.dto.responseDto.product.ResponseDtoProduct;
-import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-
-import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ChangeToDtoProduct {
