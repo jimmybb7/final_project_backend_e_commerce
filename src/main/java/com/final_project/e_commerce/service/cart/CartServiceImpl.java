@@ -51,5 +51,16 @@ public class CartServiceImpl implements CartService{
         return cartRepository.getFirebaseUserCartItemByUid(firebaseUserEntity.getUid());
     }
 
-
+    @Transactional
+    @Override
+    public void updateCartQuantity(ReqFirebaseUserDomain reqFireBaseUserDomain, String pid, Integer quantity){
+        FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFireBaseUserDomain);
+        ProductEntity productEntity = productService.checkProductWhetherExit(pid);
+        Optional<CartEntity> cartByPidAndUid = cartRepository.getCartByPidAndUid(productEntity.getPid(), firebaseUserEntity.getUid());
+        if(cartByPidAndUid.isPresent()){
+            cartByPidAndUid.get().setQuantity(quantity);
+        }else {
+            cartRepository.save(changeToCartEntity.changeToCartEntity(productEntity,firebaseUserEntity,quantity));
+        }
+    }
 }

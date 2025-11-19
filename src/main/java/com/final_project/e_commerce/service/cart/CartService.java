@@ -11,4 +11,7 @@ public interface CartService {
     void addCartItems(ReqFirebaseUserDomain reqFireBaseUserDomain, String pid, Integer quantity);
 
     List<ResponseFirebaseUserCartItemDomain> getFirebaseUserCartItems(ReqFirebaseUserDomain reqFireBaseUserDomain);
+
+    @Transactional
+    void updateCartQuantity(ReqFirebaseUserDomain reqFireBaseUserDomain, String pid, Integer quantity);
 }

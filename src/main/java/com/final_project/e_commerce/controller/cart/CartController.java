@@ -29,16 +29,23 @@ public class CartController {
 
     @PutMapping("/{pid}/{quantity}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addCartItems(@AuthenticationPrincipal Jwt jwt, @PathVariable String pid, @PathVariable Integer quantity){
+    public void addCartItems(@AuthenticationPrincipal Jwt jwt, @PathVariable String pid, @PathVariable Integer quantity) {
         ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
         cartService.addCartItems(reqFirebaseUserDomain, pid, quantity);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ResponseFirebaseUserCartItemDto> getFirebaseUserCartItems(@AuthenticationPrincipal Jwt jwt){
+    public List<ResponseFirebaseUserCartItemDto> getFirebaseUserCartItems(@AuthenticationPrincipal Jwt jwt) {
         ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
         List<ResponseFirebaseUserCartItemDomain> ResponseFirebaseUserCartItemDomainList = cartService.getFirebaseUserCartItems(reqFirebaseUserDomain);
         return changeToFirebaseUserCartItemDto.changeFirebaseUserCartItemDomainToResponseFirebaseUserCartItemDtoList(ResponseFirebaseUserCartItemDomainList);
+    }
+
+    @PatchMapping("/{pid}/{quantity}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateCartQuantity(@AuthenticationPrincipal Jwt jwt, @PathVariable String pid, @PathVariable Integer quantity) {
+        ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
+        cartService.updateCartQuantity(reqFirebaseUserDomain, pid, quantity);
     }
 }
