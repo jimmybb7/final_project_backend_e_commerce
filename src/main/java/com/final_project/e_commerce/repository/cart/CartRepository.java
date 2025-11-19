@@ -2,6 +2,7 @@ package com.final_project.e_commerce.repository.cart;
 
 import com.final_project.e_commerce.data.domainData.responseDomainData.cart.ResponseFirebaseUserCartItemDomain;
 import com.final_project.e_commerce.data.entity.cart.CartEntity;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -22,4 +23,9 @@ public interface CartRepository extends CrudRepository<CartEntity, Integer> {
             "left join product on cart_item.product_pid = product.pid " +
             "where firebase_user.uid = ?1")
     List<ResponseFirebaseUserCartItemDomain> getFirebaseUserCartItemByUid(int uid);
+
+    @Query(nativeQuery = true,
+    value = "delete from cart_item where product_pid = ?1 and firebase_user_uid = ?2")
+    @Modifying
+    void deleteCartItemByPidAndUid(String pid, int uid);
 }

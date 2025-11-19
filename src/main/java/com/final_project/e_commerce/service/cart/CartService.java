@@ -14,4 +14,7 @@ public interface CartService {
 
     @Transactional
     void updateCartQuantity(ReqFirebaseUserDomain reqFireBaseUserDomain, String pid, Integer quantity);
+
+    @Transactional
+    void deleteCartItem(ReqFirebaseUserDomain reqFirebaseUserDomain, String pid);
 }

@@ -63,4 +63,11 @@ public class CartServiceImpl implements CartService{
             cartRepository.save(changeToCartEntity.changeToCartEntity(productEntity,firebaseUserEntity,quantity));
         }
     }
+
+    @Transactional
+    @Override
+    public void deleteCartItem(ReqFirebaseUserDomain reqFirebaseUserDomain, String pid){
+        FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFirebaseUserDomain);
+            cartRepository.deleteCartItemByPidAndUid(pid, firebaseUserEntity.getUid());
+    }
 }
