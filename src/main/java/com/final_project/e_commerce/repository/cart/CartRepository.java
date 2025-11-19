@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface CartRepository extends CrudRepository<CartEntity,Integer> {
 
 @Query(nativeQuery = true,
-value = "select * from cart_item where firebase_user_uid = ?1 and product_pid = ?2")
+value = "select * from cart_item where product_pid = ?1 and firebase_user_uid = ?2")
     Optional<CartEntity> getCartByPidAndUid(int pid,int uid);
 }

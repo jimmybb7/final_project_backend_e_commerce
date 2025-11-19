@@ -8,5 +8,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ChangeToCartEntity {
 
-    public void changeToCartEntity(ProductEntity productEntity, FirebaseUserEntity firebaseUserEntity, Integer quantity) {}
+    public CartEntity changeToCartEntity(ProductEntity productEntity, FirebaseUserEntity firebaseUserEntity, Integer quantity) {
+        CartEntity cartEntity = new CartEntity();
+        cartEntity.setProduct(productEntity);
+        cartEntity.setQuantity(quantity);
+        cartEntity.setFirebaseUser(firebaseUserEntity);
+        return cartEntity;
+    }
 }
