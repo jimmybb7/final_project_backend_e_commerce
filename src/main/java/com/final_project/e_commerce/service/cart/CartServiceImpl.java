@@ -1,6 +1,7 @@
 package com.final_project.e_commerce.service.cart;
 
 import com.final_project.e_commerce.data.domainData.reqDomainData.firebaseUser.ReqFirebaseUserDomain;
+import com.final_project.e_commerce.data.domainData.responseDomainData.cart.ResponseFirebaseUserCartItemDomain;
 import com.final_project.e_commerce.data.entity.cart.CartEntity;
 import com.final_project.e_commerce.data.entity.firebaseUser.FirebaseUserEntity;
 import com.final_project.e_commerce.data.entity.product.ProductEntity;
@@ -11,6 +12,7 @@ import com.final_project.e_commerce.service.product.ProductService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,6 +43,12 @@ public class CartServiceImpl implements CartService{
         }else {
             cartRepository.save(changeToCartEntity.changeToCartEntity(productEntity,firebaseUserEntity,quantity));
         }
+    }
+
+    @Override
+    public List<ResponseFirebaseUserCartItemDomain> getFirebaseUserCartItems(ReqFirebaseUserDomain reqFireBaseUserDomain){
+        FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFireBaseUserDomain);
+        return cartRepository.getFirebaseUserCartItemByUid(firebaseUserEntity.getUid());
     }
 
 
