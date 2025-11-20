@@ -24,6 +24,7 @@ public interface CartRepository extends CrudRepository<CartEntity, Integer> {
             "where firebase_user.uid = ?1")
     List<ResponseFirebaseUserCartItemDomain> getFirebaseUserCartItemByUid(int uid);
 
+
     @Query(nativeQuery = true,
     value = "delete from cart_item where product_pid = ?1 and firebase_user_uid = ?2")
     @Modifying
