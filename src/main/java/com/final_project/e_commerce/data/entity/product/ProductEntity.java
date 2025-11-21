@@ -26,6 +26,7 @@ public class ProductEntity {
 
     private String imageUrl;
 
+    @Column(nullable = false)
     private Integer stock;
 
     @Column(nullable = false)

@@ -1,0 +1,22 @@
+package com.final_project.e_commerce.data.domainData.responseDomainData.transaction;
+
+import com.final_project.e_commerce.data.domainData.responseDomainData.firebase.ResponseFirebaseUserDomain;
+import com.final_project.e_commerce.data.domainData.responseDomainData.transactionProduct.ResponseTransactionProductDomain;
+import com.final_project.e_commerce.data.entity.firebaseUser.FirebaseUserEntity;
+import com.final_project.e_commerce.service.transaction.TransactionStatusEnum;
+import lombok.Data;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Data
+public class ResponseTransactionDomain {
+    private Integer tid;
+    private Integer buyerUid;
+    private LocalDateTime datetime;
+    private TransactionStatusEnum status;
+    private BigDecimal total;
+    private List<ResponseTransactionProductDomain> products;
+
+}

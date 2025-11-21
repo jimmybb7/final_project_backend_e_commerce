@@ -29,4 +29,9 @@ public interface CartRepository extends CrudRepository<CartEntity, Integer> {
     value = "delete from cart_item where product_pid = ?1 and firebase_user_uid = ?2")
     @Modifying
     void deleteCartItemByPidAndUid(String pid, int uid);
+
+
+    @Query(nativeQuery = true,
+    value = "select * from cart_item where firebase_user_uid = ?1")
+    List<CartEntity> getCartItemEntityListByUid(int uid);
 }
