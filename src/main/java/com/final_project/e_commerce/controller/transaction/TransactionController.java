@@ -40,4 +40,11 @@ public class TransactionController {
         ResponseTransactionDomain responseTransactionDomain = transactionService.getTransaction(reqFirebaseUserDomain, tid);
         return changeToTransactionDto.responseTransactionDomainChangeToResponseTransactionDto(responseTransactionDomain, responseTransactionDomain.getProducts());
     }
+
+    @PatchMapping("/{tid}/payment")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateTransactionStatusToProcessing(@AuthenticationPrincipal Jwt jwt, @PathVariable Integer tid) {
+        ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
+        transactionService.updateTransactionStatusToProcessing(reqFirebaseUserDomain, tid);
+    }
 }

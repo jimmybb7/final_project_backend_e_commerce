@@ -9,4 +9,7 @@ public interface TransactionService {
     ResponseTransactionDomain createTransaction(ReqFirebaseUserDomain reqFirebaseUserDomain);
 
     ResponseTransactionDomain getTransaction(ReqFirebaseUserDomain reqFirebaseUserDomain, Integer tid);
+
+    @Transactional
+    void updateTransactionStatusToProcessing(ReqFirebaseUserDomain reqFirebaseUserDomain, Integer tid);
 }

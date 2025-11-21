@@ -7,6 +7,7 @@ import com.final_project.e_commerce.data.entity.firebaseUser.FirebaseUserEntity;
 import com.final_project.e_commerce.data.entity.transaction.TransactionEntity;
 import com.final_project.e_commerce.data.entity.transactionProduct.TransactionProductEntity;
 import com.final_project.e_commerce.exception.TransactionIdNotFoundException;
+import com.final_project.e_commerce.exception.TransactionStatusException;
 import com.final_project.e_commerce.mapper.transaction.ChangeToDomainTransaction;
 import com.final_project.e_commerce.mapper.transaction.ChangeToTransactionEntity;
 import com.final_project.e_commerce.mapper.transactionProduct.ChangeToTransactionProductEntity;
@@ -60,15 +61,32 @@ public class TransactionServicerImpl implements TransactionService {
     }
 
     @Override
-    public ResponseTransactionDomain getTransaction(ReqFirebaseUserDomain reqFirebaseUserDomain, Integer tid){
+    public ResponseTransactionDomain getTransaction(ReqFirebaseUserDomain reqFirebaseUserDomain, Integer tid) {
         FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFirebaseUserDomain);
         Optional<TransactionEntity> transactionByTid = transactionRepository.getTransactionByTid(firebaseUserEntity.getUid(), tid);
-        if (transactionByTid.isEmpty()){
+        if (transactionByTid.isEmpty()) {
             logger.warn("Transaction with tid {} not found", tid);
             throw new TransactionIdNotFoundException(tid);
         }
         TransactionEntity transactionEntity = transactionByTid.get();
         List<TransactionProductEntity> transactionProductList = transactionProductService.getTransactionProductByTid(tid);
         return changeToDomainTransaction.transactionEntityChangeToResponseTransactionDomain(transactionEntity, transactionProductList);
+    }
+
+    @Transactional
+    @Override
+    public void updateTransactionStatusToProcessing(ReqFirebaseUserDomain reqFirebaseUserDomain, Integer tid) {
+        FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFirebaseUserDomain);
+        Optional<TransactionEntity> transactionByTid = transactionRepository.getTransactionByTid(firebaseUserEntity.getUid(), tid);
+        if (transactionByTid.isEmpty()) {
+            logger.warn("Transaction with tid {} not found", tid);
+            throw new TransactionIdNotFoundException(tid);
+        }
+        TransactionEntity transactionEntity = transactionByTid.get();
+        if (transactionEntity.getStatus() != TransactionStatusEnum.PREPARE){
+            logger.warn("tid: {} Transaction status not in PREPARE", tid);
+            throw new TransactionStatusException(tid);
+        }
+        transactionEntity.setStatus(TransactionStatusEnum.PROCESSING);
     }
 }
