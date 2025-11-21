@@ -7,4 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface TransactionService {
     @Transactional
     ResponseTransactionDomain createTransaction(ReqFirebaseUserDomain reqFirebaseUserDomain);
+
+    ResponseTransactionDomain getTransaction(ReqFirebaseUserDomain reqFirebaseUserDomain, Integer tid);
 }

@@ -9,10 +9,7 @@ import com.final_project.e_commerce.service.transaction.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/transactions")
@@ -33,6 +30,14 @@ public class TransactionController {
     public ResponseTransactionDto createTransaction(@AuthenticationPrincipal Jwt jwt) {
         ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
         ResponseTransactionDomain responseTransactionDomain = transactionService.createTransaction(reqFirebaseUserDomain);
+        return changeToTransactionDto.responseTransactionDomainChangeToResponseTransactionDto(responseTransactionDomain, responseTransactionDomain.getProducts());
+    }
+
+    @GetMapping("/{tid}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseTransactionDto getTransaction(@AuthenticationPrincipal Jwt jwt, @PathVariable Integer tid) {
+        ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
+        ResponseTransactionDomain responseTransactionDomain = transactionService.getTransaction(reqFirebaseUserDomain, tid);
         return changeToTransactionDto.responseTransactionDomainChangeToResponseTransactionDto(responseTransactionDomain, responseTransactionDomain.getProducts());
     }
 }

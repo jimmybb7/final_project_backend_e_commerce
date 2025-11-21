@@ -6,6 +6,7 @@ import com.final_project.e_commerce.data.entity.cart.CartEntity;
 import com.final_project.e_commerce.data.entity.firebaseUser.FirebaseUserEntity;
 import com.final_project.e_commerce.data.entity.transaction.TransactionEntity;
 import com.final_project.e_commerce.data.entity.transactionProduct.TransactionProductEntity;
+import com.final_project.e_commerce.exception.TransactionIdNotFoundException;
 import com.final_project.e_commerce.mapper.transaction.ChangeToDomainTransaction;
 import com.final_project.e_commerce.mapper.transaction.ChangeToTransactionEntity;
 import com.final_project.e_commerce.mapper.transactionProduct.ChangeToTransactionProductEntity;
@@ -13,10 +14,14 @@ import com.final_project.e_commerce.repository.transaction.TransactionRepository
 import com.final_project.e_commerce.repository.transactionProduct.TransactionProductRepository;
 import com.final_project.e_commerce.service.cart.CartService;
 import com.final_project.e_commerce.service.firebaseUser.FirebaseUserService;
+import com.final_project.e_commerce.service.transactionProduct.TransactionProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransactionServicerImpl implements TransactionService {
@@ -28,8 +33,10 @@ public class TransactionServicerImpl implements TransactionService {
     private final TransactionProductRepository transactionProductRepository;
     private final ChangeToTransactionProductEntity changeToTransactionProductEntity;
     private final ChangeToDomainTransaction changeToDomainTransaction;
+    private final Logger logger = LoggerFactory.getLogger(TransactionServicerImpl.class);
+    private final TransactionProductService transactionProductService;
 
-    public TransactionServicerImpl(FirebaseUserService firebaseUserService, CartService cartService, ChangeToTransactionEntity changeToTransactionEntity, TransactionRepository transactionRepository, TransactionProductRepository transactionProductRepository, ChangeToTransactionProductEntity changeToTransactionProductEntity, ChangeToDomainTransaction changeToDomainTransaction) {
+    public TransactionServicerImpl(FirebaseUserService firebaseUserService, CartService cartService, ChangeToTransactionEntity changeToTransactionEntity, TransactionRepository transactionRepository, TransactionProductRepository transactionProductRepository, ChangeToTransactionProductEntity changeToTransactionProductEntity, ChangeToDomainTransaction changeToDomainTransaction, TransactionProductService transactionProductService) {
         this.firebaseUserService = firebaseUserService;
         this.cartService = cartService;
         this.changeToTransactionEntity = changeToTransactionEntity;
@@ -37,6 +44,7 @@ public class TransactionServicerImpl implements TransactionService {
         this.transactionProductRepository = transactionProductRepository;
         this.changeToTransactionProductEntity = changeToTransactionProductEntity;
         this.changeToDomainTransaction = changeToDomainTransaction;
+        this.transactionProductService = transactionProductService;
     }
 
     @Transactional
@@ -49,5 +57,18 @@ public class TransactionServicerImpl implements TransactionService {
         List<TransactionProductEntity> transactionProductEntityList = changeToTransactionProductEntity.changeToTransactionProductEntity(savedTransactionEntity, cartItemEntityList);
         transactionProductRepository.saveAll(transactionProductEntityList);
         return changeToDomainTransaction.transactionEntityChangeToResponseTransactionDomain(savedTransactionEntity, transactionProductEntityList);
+    }
+
+    @Override
+    public ResponseTransactionDomain getTransaction(ReqFirebaseUserDomain reqFirebaseUserDomain, Integer tid){
+        FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFirebaseUserDomain);
+        Optional<TransactionEntity> transactionByTid = transactionRepository.getTransactionByTid(firebaseUserEntity.getUid(), tid);
+        if (transactionByTid.isEmpty()){
+            logger.warn("Transaction with tid {} not found", tid);
+            throw new TransactionIdNotFoundException(tid);
+        }
+        TransactionEntity transactionEntity = transactionByTid.get();
+        List<TransactionProductEntity> transactionProductList = transactionProductService.getTransactionProductByTid(tid);
+        return changeToDomainTransaction.transactionEntityChangeToResponseTransactionDomain(transactionEntity, transactionProductList);
     }
 }
