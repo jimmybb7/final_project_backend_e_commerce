@@ -17,21 +17,27 @@ public interface CartRepository extends CrudRepository<CartEntity, Integer> {
 
 
     @Query(nativeQuery = true,
-    value = "select product.pid, product.name, product.price, product.image_url, cart_item.quantity, product.stock" +
-            " from firebase_user " +
-            "left join cart_item on firebase_user.uid = cart_item.firebase_user_uid " +
-            "left join product on cart_item.product_pid = product.pid " +
-            "where firebase_user.uid = ?1")
+            value = "select product.pid, product.name, product.price, product.image_url, cart_item.quantity, product.stock" +
+                    " from firebase_user " +
+                    "left join cart_item on firebase_user.uid = cart_item.firebase_user_uid " +
+                    "left join product on cart_item.product_pid = product.pid " +
+                    "where firebase_user.uid = ?1")
     List<ResponseFirebaseUserCartItemDomain> getFirebaseUserCartItemByUid(int uid);
 
 
     @Query(nativeQuery = true,
-    value = "delete from cart_item where product_pid = ?1 and firebase_user_uid = ?2")
+            value = "delete from cart_item where product_pid = ?1 and firebase_user_uid = ?2")
     @Modifying
     void deleteCartItemByPidAndUid(String pid, int uid);
 
 
     @Query(nativeQuery = true,
-    value = "select * from cart_item where firebase_user_uid = ?1")
+            value = "select * from cart_item where firebase_user_uid = ?1")
     List<CartEntity> getCartItemEntityListByUid(int uid);
+
+
+    @Query(nativeQuery = true,
+            value = "delete from cart_item where firebase_user_uid = ?1")
+    @Modifying
+    void deleteCartItemByUserId(Integer uid);
 }

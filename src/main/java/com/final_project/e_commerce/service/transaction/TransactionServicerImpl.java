@@ -15,6 +15,7 @@ import com.final_project.e_commerce.repository.transaction.TransactionRepository
 import com.final_project.e_commerce.repository.transactionProduct.TransactionProductRepository;
 import com.final_project.e_commerce.service.cart.CartService;
 import com.final_project.e_commerce.service.firebaseUser.FirebaseUserService;
+import com.final_project.e_commerce.service.product.ProductService;
 import com.final_project.e_commerce.service.transactionProduct.TransactionProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +37,9 @@ public class TransactionServicerImpl implements TransactionService {
     private final ChangeToDomainTransaction changeToDomainTransaction;
     private final Logger logger = LoggerFactory.getLogger(TransactionServicerImpl.class);
     private final TransactionProductService transactionProductService;
+    private final ProductService  productService;
 
-    public TransactionServicerImpl(FirebaseUserService firebaseUserService, CartService cartService, ChangeToTransactionEntity changeToTransactionEntity, TransactionRepository transactionRepository, TransactionProductRepository transactionProductRepository, ChangeToTransactionProductEntity changeToTransactionProductEntity, ChangeToDomainTransaction changeToDomainTransaction, TransactionProductService transactionProductService) {
+    public TransactionServicerImpl(FirebaseUserService firebaseUserService, CartService cartService, ChangeToTransactionEntity changeToTransactionEntity, TransactionRepository transactionRepository, TransactionProductRepository transactionProductRepository, ChangeToTransactionProductEntity changeToTransactionProductEntity, ChangeToDomainTransaction changeToDomainTransaction, TransactionProductService transactionProductService, ProductService productService) {
         this.firebaseUserService = firebaseUserService;
         this.cartService = cartService;
         this.changeToTransactionEntity = changeToTransactionEntity;
@@ -46,6 +48,7 @@ public class TransactionServicerImpl implements TransactionService {
         this.changeToTransactionProductEntity = changeToTransactionProductEntity;
         this.changeToDomainTransaction = changeToDomainTransaction;
         this.transactionProductService = transactionProductService;
+        this.productService = productService;
     }
 
     @Transactional
@@ -85,8 +88,40 @@ public class TransactionServicerImpl implements TransactionService {
         TransactionEntity transactionEntity = transactionByTid.get();
         if (transactionEntity.getStatus() != TransactionStatusEnum.PREPARE){
             logger.warn("tid: {} Transaction status not in PREPARE", tid);
-            throw new TransactionStatusException(tid);
+            throw new TransactionStatusException(tid, "PREPARE");
         }
         transactionEntity.setStatus(TransactionStatusEnum.PROCESSING);
     }
+
+    @Transactional
+    @Override
+    public ResponseTransactionDomain updateTransactionStatusToSuccess(ReqFirebaseUserDomain reqFirebaseUserDomain, Integer tid) {
+        FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFirebaseUserDomain);
+        Optional<TransactionEntity> transactionByTid = transactionRepository.getTransactionByTid(firebaseUserEntity.getUid(), tid);
+        if (transactionByTid.isEmpty()) {
+            logger.warn("Transaction with tid {} not found", tid);
+            throw new TransactionIdNotFoundException(tid);
+        }
+        TransactionEntity transactionEntity = transactionByTid.get();
+        if (transactionEntity.getStatus() != TransactionStatusEnum.PROCESSING){
+            logger.warn("tid: {} Transaction status not in PROCESSING", tid);
+            throw new TransactionStatusException(tid, "PROCESSING");
+        }
+        List<CartEntity> cartItemEntityList = cartService.getCartItemEntityListByUid(firebaseUserEntity);
+        productService.deduceStock(cartItemEntityList);
+        transactionEntity.setStatus(TransactionStatusEnum.SUCCESS);
+        cartService.deleteCartItemByUserId(firebaseUserEntity);
+        List<TransactionProductEntity> transactionProductList = transactionProductService.getTransactionProductByTid(tid);
+        return changeToDomainTransaction.transactionEntityChangeToResponseTransactionDomain(transactionEntity, transactionProductList);
+    }
+
+
+
+//    public boolean checkTransactionStatus(TransactionEntity  transactionEntity, Integer tid, TransactionStatusEnum  transactionStatus) {
+//        if (transactionEntity.getStatus() != transactionStatus){
+//            logger.warn("tid: {} Transaction status not in {}", tid,  transactionStatus);
+//            throw new TransactionStatusException(tid, transactionStatus);
+//        }
+//        return  true;
+//    }
 }

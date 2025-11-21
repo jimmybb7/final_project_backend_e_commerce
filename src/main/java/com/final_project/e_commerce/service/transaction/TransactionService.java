@@ -12,4 +12,7 @@ public interface TransactionService {
 
     @Transactional
     void updateTransactionStatusToProcessing(ReqFirebaseUserDomain reqFirebaseUserDomain, Integer tid);
+
+    @Transactional
+    ResponseTransactionDomain updateTransactionStatusToSuccess(ReqFirebaseUserDomain reqFirebaseUserDomain, Integer tid);
 }

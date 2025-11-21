@@ -47,4 +47,12 @@ public class TransactionController {
         ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
         transactionService.updateTransactionStatusToProcessing(reqFirebaseUserDomain, tid);
     }
+
+    @PatchMapping("/{tid}/success")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseTransactionDto updateTransactionStatusToSuccess(@AuthenticationPrincipal Jwt jwt, @PathVariable Integer tid) {
+        ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
+        ResponseTransactionDomain responseTransactionDomain = transactionService.updateTransactionStatusToSuccess(reqFirebaseUserDomain, tid);
+        return changeToTransactionDto.responseTransactionDomainChangeToResponseTransactionDto(responseTransactionDomain, responseTransactionDomain.getProducts());
+    }
 }

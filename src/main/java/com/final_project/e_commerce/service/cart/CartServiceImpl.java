@@ -48,7 +48,7 @@ public class CartServiceImpl implements CartService {
                 Integer originalQuantity = cartEntity.getQuantity();
                 if (originalQuantity + quantity > productEntity.getStock()) {
                     logger.warn(productEntity.getName() + " quantity add more than the stock");
-                    throw new StockNotEnoughException(quantity);
+                    throw new StockNotEnoughException(quantity, productEntity.getName());
                 } else {
                     cartEntity.setQuantity(originalQuantity + quantity);
                 }
@@ -65,7 +65,7 @@ public class CartServiceImpl implements CartService {
         }
         if (productEntity.getStock() < quantity) {
             logger.warn(productEntity.getName() + " quantity add more than the stock");
-            throw new StockNotEnoughException(quantity);
+            throw new StockNotEnoughException(quantity,  productEntity.getName());
         }
         return true;
     }
@@ -93,7 +93,7 @@ public class CartServiceImpl implements CartService {
 
     @Transactional
     @Override
-    public void deleteCartItem(ReqFirebaseUserDomain reqFirebaseUserDomain, String pid) {
+    public void deleteSingleCartItem(ReqFirebaseUserDomain reqFirebaseUserDomain, String pid) {
         FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFirebaseUserDomain);
         cartRepository.deleteCartItemByPidAndUid(pid, firebaseUserEntity.getUid());
     }
@@ -106,5 +106,11 @@ public class CartServiceImpl implements CartService {
             throw new CartItemEmptyException(firebaseUserEntity.getUid());
         }
         return cartItemEntityList;
+    }
+
+    @Transactional
+    @Override
+    public void deleteCartItemByUserId(FirebaseUserEntity firebaseUserEntity) {
+        cartRepository.deleteCartItemByUserId(firebaseUserEntity.getUid());
     }
 }

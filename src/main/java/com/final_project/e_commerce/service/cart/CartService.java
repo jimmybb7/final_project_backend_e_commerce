@@ -18,7 +18,10 @@ public interface CartService {
     void updateCartQuantity(ReqFirebaseUserDomain reqFireBaseUserDomain, String pid, Integer quantity);
 
     @Transactional
-    void deleteCartItem(ReqFirebaseUserDomain reqFirebaseUserDomain, String pid);
+    void deleteSingleCartItem(ReqFirebaseUserDomain reqFirebaseUserDomain, String pid);
 
     List<CartEntity> getCartItemEntityListByUid(FirebaseUserEntity firebaseUserEntity);
+
+    @Transactional
+    void deleteCartItemByUserId(FirebaseUserEntity firebaseUserEntity);
 }

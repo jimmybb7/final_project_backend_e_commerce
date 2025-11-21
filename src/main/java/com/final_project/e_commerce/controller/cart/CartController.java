@@ -53,6 +53,6 @@ public class CartController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCartItem(@AuthenticationPrincipal Jwt jwt, @PathVariable String pid) {
         ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
-        cartService.deleteCartItem(reqFirebaseUserDomain, pid);
+        cartService.deleteSingleCartItem(reqFirebaseUserDomain, pid);
     }
 }
