@@ -45,7 +45,6 @@ public class ProductServiceImpl implements ProductService {
         if (productById.isPresent()) {
             return productById.get();
         }
-        logger.warn("the product with id " + pid + " does not exist");
         throw new ProductNotFoundException(pid);
     }
 
@@ -71,7 +70,6 @@ public class ProductServiceImpl implements ProductService {
     public void deduceStock(List<CartEntity> cartItemEntityList) {
         cartItemEntityList.stream().forEach(cartEntity -> {
             if (cartEntity.getProduct().getStock() < cartEntity.getQuantity()) {
-                logger.warn("Product: {} - Quantity: {}, stock is not enough", cartEntity.getProduct().getName(), cartEntity.getQuantity());
                 throw new StockNotEnoughException(cartEntity.getQuantity(), cartEntity.getProduct().getName());
             }
         });

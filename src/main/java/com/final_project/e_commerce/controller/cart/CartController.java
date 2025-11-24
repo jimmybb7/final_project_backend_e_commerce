@@ -1,5 +1,6 @@
 package com.final_project.e_commerce.controller.cart;
 
+import com.final_project.e_commerce.common.Result;
 import com.final_project.e_commerce.data.domainData.reqDomainData.firebaseUser.ReqFirebaseUserDomain;
 import com.final_project.e_commerce.data.domainData.responseDomainData.cart.ResponseFirebaseUserCartItemDomain;
 import com.final_project.e_commerce.data.dto.responseDto.cart.ResponseFirebaseUserCartItemDto;
@@ -29,30 +30,41 @@ public class CartController {
 
     @PutMapping("/{pid}/{quantity}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addCartItems(@AuthenticationPrincipal Jwt jwt, @PathVariable String pid, @PathVariable Integer quantity) {
+    public Result addCartItems(@AuthenticationPrincipal Jwt jwt, @PathVariable String pid, @PathVariable Integer quantity) {
         ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
         cartService.addCartItems(reqFirebaseUserDomain, pid, quantity);
+        return Result.successNoReturnType("204");
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ResponseFirebaseUserCartItemDto> getFirebaseUserCartItems(@AuthenticationPrincipal Jwt jwt) {
+    public Result getFirebaseUserCartItems(@AuthenticationPrincipal Jwt jwt) {
         ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
         List<ResponseFirebaseUserCartItemDomain> ResponseFirebaseUserCartItemDomainList = cartService.getFirebaseUserCartItems(reqFirebaseUserDomain);
-        return changeToFirebaseUserCartItemDto.changeFirebaseUserCartItemDomainToResponseFirebaseUserCartItemDtoList(ResponseFirebaseUserCartItemDomainList);
+        List<ResponseFirebaseUserCartItemDto> responseFirebaseUserCartItemDtoList = changeToFirebaseUserCartItemDto.changeFirebaseUserCartItemDomainToResponseFirebaseUserCartItemDtoList(ResponseFirebaseUserCartItemDomainList);
+        return Result.successWithReturnType("200", responseFirebaseUserCartItemDtoList);
     }
 
     @PatchMapping("/{pid}/{quantity}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateCartQuantity(@AuthenticationPrincipal Jwt jwt, @PathVariable String pid, @PathVariable Integer quantity) {
+    public Result updateCartQuantity(@AuthenticationPrincipal Jwt jwt, @PathVariable String pid, @PathVariable Integer quantity) {
         ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
         cartService.updateCartQuantity(reqFirebaseUserDomain, pid, quantity);
+        return Result.successNoReturnType("204");
     }
+
+//    @DeleteMapping("{pid}")
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    public void deleteCartItem(@AuthenticationPrincipal Jwt jwt, @PathVariable String pid) {
+//        ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
+//        cartService.deleteSingleCartItem(reqFirebaseUserDomain, pid);
+//    }
 
     @DeleteMapping("{pid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCartItem(@AuthenticationPrincipal Jwt jwt, @PathVariable String pid) {
+    public Result deleteCartItem(@AuthenticationPrincipal Jwt jwt, @PathVariable String pid) {
         ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
         cartService.deleteSingleCartItem(reqFirebaseUserDomain, pid);
+        return Result.successNoReturnType("204");
     }
 }

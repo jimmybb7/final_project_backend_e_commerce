@@ -1,5 +1,6 @@
 package com.final_project.e_commerce.controller.transaction;
 
+import com.final_project.e_commerce.common.Result;
 import com.final_project.e_commerce.data.domainData.reqDomainData.firebaseUser.ReqFirebaseUserDomain;
 import com.final_project.e_commerce.data.domainData.responseDomainData.transaction.ResponseTransactionDomain;
 import com.final_project.e_commerce.data.dto.responseDto.transaction.ResponseTransactionDto;
@@ -27,32 +28,36 @@ public class TransactionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseTransactionDto createTransaction(@AuthenticationPrincipal Jwt jwt) {
+    public Result createTransaction(@AuthenticationPrincipal Jwt jwt) {
         ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
         ResponseTransactionDomain responseTransactionDomain = transactionService.createTransaction(reqFirebaseUserDomain);
-        return changeToTransactionDto.responseTransactionDomainChangeToResponseTransactionDto(responseTransactionDomain, responseTransactionDomain.getProducts());
+        ResponseTransactionDto responseTransactionDto = changeToTransactionDto.responseTransactionDomainChangeToResponseTransactionDto(responseTransactionDomain, responseTransactionDomain.getProducts());
+        return Result.successWithReturnType("201", responseTransactionDto);
     }
 
     @GetMapping("/{tid}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseTransactionDto getTransaction(@AuthenticationPrincipal Jwt jwt, @PathVariable Integer tid) {
+    public Result getTransaction(@AuthenticationPrincipal Jwt jwt, @PathVariable Integer tid) {
         ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
         ResponseTransactionDomain responseTransactionDomain = transactionService.getTransaction(reqFirebaseUserDomain, tid);
-        return changeToTransactionDto.responseTransactionDomainChangeToResponseTransactionDto(responseTransactionDomain, responseTransactionDomain.getProducts());
+        ResponseTransactionDto responseTransactionDto = changeToTransactionDto.responseTransactionDomainChangeToResponseTransactionDto(responseTransactionDomain, responseTransactionDomain.getProducts());
+        return Result.successWithReturnType("200", responseTransactionDto);
     }
 
     @PatchMapping("/{tid}/payment")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateTransactionStatusToProcessing(@AuthenticationPrincipal Jwt jwt, @PathVariable Integer tid) {
+    public Result updateTransactionStatusToProcessing(@AuthenticationPrincipal Jwt jwt, @PathVariable Integer tid) {
         ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
         transactionService.updateTransactionStatusToProcessing(reqFirebaseUserDomain, tid);
+        return Result.successNoReturnType("204");
     }
 
     @PatchMapping("/{tid}/success")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseTransactionDto updateTransactionStatusToSuccess(@AuthenticationPrincipal Jwt jwt, @PathVariable Integer tid) {
+    public Result updateTransactionStatusToSuccess(@AuthenticationPrincipal Jwt jwt, @PathVariable Integer tid) {
         ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
         ResponseTransactionDomain responseTransactionDomain = transactionService.updateTransactionStatusToSuccess(reqFirebaseUserDomain, tid);
-        return changeToTransactionDto.responseTransactionDomainChangeToResponseTransactionDto(responseTransactionDomain, responseTransactionDomain.getProducts());
+        ResponseTransactionDto responseTransactionDto = changeToTransactionDto.responseTransactionDomainChangeToResponseTransactionDto(responseTransactionDomain, responseTransactionDomain.getProducts());
+        return Result.successWithReturnType("200", responseTransactionDto);
     }
 }

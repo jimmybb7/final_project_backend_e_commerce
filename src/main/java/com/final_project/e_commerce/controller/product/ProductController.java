@@ -1,5 +1,6 @@
 package com.final_project.e_commerce.controller.product;
 
+import com.final_project.e_commerce.common.Result;
 import com.final_project.e_commerce.data.domainData.responseDomainData.product.ResponseProductDomainData;
 import com.final_project.e_commerce.data.dto.responseDto.product.ResponseAllDtoProduct;
 import com.final_project.e_commerce.data.dto.responseDto.product.ResponseDtoProduct;
@@ -24,16 +25,18 @@ public class ProductController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ResponseAllDtoProduct> getProducts() {
+    public Result getProducts() {
         List<ResponseProductDomainData> productlist = productService.getProduct();
-        return changeToDtoProduct.changeProductDomainToResponseDtoList(productlist);
+        List<ResponseAllDtoProduct> responseAllDtoProducts = changeToDtoProduct.changeProductDomainToResponseDtoList(productlist);
+        return Result.successWithReturnType("200", responseAllDtoProducts);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseDtoProduct getProductById(@PathVariable(name = "id") String pid) {
+    public Result getProductById(@PathVariable(name = "id") String pid) {
         ResponseProductDomainData responseProductDomainData = productService.getProductById(pid);
-        return changeToDtoProduct.changeProductDomainToResponseDtoById(responseProductDomainData);
+        ResponseDtoProduct responseDtoProduct = changeToDtoProduct.changeProductDomainToResponseDtoById(responseProductDomainData);
+        return Result.successWithReturnType("200", responseDtoProduct);
     }
 
 }

@@ -68,7 +68,6 @@ public class TransactionServicerImpl implements TransactionService {
         FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFirebaseUserDomain);
         Optional<TransactionEntity> transactionByTid = transactionRepository.getTransactionByTid(firebaseUserEntity.getUid(), tid);
         if (transactionByTid.isEmpty()) {
-            logger.warn("Transaction with tid {} not found", tid);
             throw new TransactionIdNotFoundException(tid);
         }
         TransactionEntity transactionEntity = transactionByTid.get();
@@ -82,12 +81,10 @@ public class TransactionServicerImpl implements TransactionService {
         FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFirebaseUserDomain);
         Optional<TransactionEntity> transactionByTid = transactionRepository.getTransactionByTid(firebaseUserEntity.getUid(), tid);
         if (transactionByTid.isEmpty()) {
-            logger.warn("Transaction with tid {} not found", tid);
             throw new TransactionIdNotFoundException(tid);
         }
         TransactionEntity transactionEntity = transactionByTid.get();
         if (transactionEntity.getStatus() != TransactionStatusEnum.PREPARE){
-            logger.warn("tid: {} Transaction status not in PREPARE", tid);
             throw new TransactionStatusException(tid, "PREPARE");
         }
         transactionEntity.setStatus(TransactionStatusEnum.PROCESSING);
@@ -99,12 +96,10 @@ public class TransactionServicerImpl implements TransactionService {
         FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFirebaseUserDomain);
         Optional<TransactionEntity> transactionByTid = transactionRepository.getTransactionByTid(firebaseUserEntity.getUid(), tid);
         if (transactionByTid.isEmpty()) {
-            logger.warn("Transaction with tid {} not found", tid);
             throw new TransactionIdNotFoundException(tid);
         }
         TransactionEntity transactionEntity = transactionByTid.get();
         if (transactionEntity.getStatus() != TransactionStatusEnum.PROCESSING){
-            logger.warn("tid: {} Transaction status not in PROCESSING", tid);
             throw new TransactionStatusException(tid, "PROCESSING");
         }
         List<CartEntity> cartItemEntityList = cartService.getCartItemEntityListByUid(firebaseUserEntity);

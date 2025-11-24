@@ -47,7 +47,6 @@ public class CartServiceImpl implements CartService {
                 CartEntity cartEntity = cartByPidAndUid.get();
                 Integer originalQuantity = cartEntity.getQuantity();
                 if (originalQuantity + quantity > productEntity.getStock()) {
-                    logger.warn(productEntity.getName() + " quantity add more than the stock");
                     throw new StockNotEnoughException(quantity, productEntity.getName());
                 } else {
                     cartEntity.setQuantity(originalQuantity + quantity);
@@ -60,11 +59,9 @@ public class CartServiceImpl implements CartService {
 
     public boolean checkValidQuantity(ProductEntity productEntity, int quantity) {
         if (quantity <= 0) {
-            logger.warn("input quantity invalid " + quantity + ", input must be a positive integer");
             throw new InputQuantityInvalidException(quantity);
         }
         if (productEntity.getStock() < quantity) {
-            logger.warn(productEntity.getName() + " quantity add more than the stock");
             throw new StockNotEnoughException(quantity,  productEntity.getName());
         }
         return true;
@@ -102,7 +99,6 @@ public class CartServiceImpl implements CartService {
     public List<CartEntity> getCartItemEntityListByUid(FirebaseUserEntity firebaseUserEntity) {
         List<CartEntity> cartItemEntityList = cartRepository.getCartItemEntityListByUid(firebaseUserEntity.getUid());
         if (cartItemEntityList.isEmpty()) {
-            logger.warn("No cartItemEntity found");
             throw new CartItemEmptyException(firebaseUserEntity.getUid());
         }
         return cartItemEntityList;
