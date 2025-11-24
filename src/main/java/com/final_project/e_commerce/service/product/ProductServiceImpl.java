@@ -9,9 +9,11 @@ import com.final_project.e_commerce.mapper.product.ChangeToDomainDataProduct;
 import com.final_project.e_commerce.repository.product.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.lang.model.element.Name;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +35,7 @@ public class ProductServiceImpl implements ProductService {
         return changeToDomainDataProduct.changeProductEntityToResponseDomainList(productList);
     }
 
+    @Cacheable(cacheNames = "product", key = "#pid")
     @Override
     public ResponseProductDomainData getProductById(String pid) {
         ProductEntity productEntity = checkProductWhetherExit(pid);

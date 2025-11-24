@@ -4,13 +4,15 @@ package com.final_project.e_commerce.data.entity.product;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
 @Entity
 @Table(name = "product",
         indexes = {@Index(name = "idx_product_name", columnList = "name")})
-public class ProductEntity {
+public class ProductEntity implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pid;
