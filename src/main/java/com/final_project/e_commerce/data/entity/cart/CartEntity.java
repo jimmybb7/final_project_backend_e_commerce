@@ -5,10 +5,12 @@ import com.final_project.e_commerce.data.entity.product.ProductEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "cart_item")
 @Data
-public class CartEntity {
+public class CartEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cid;

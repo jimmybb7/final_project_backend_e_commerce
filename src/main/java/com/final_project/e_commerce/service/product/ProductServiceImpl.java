@@ -9,11 +9,12 @@ import com.final_project.e_commerce.mapper.product.ChangeToDomainDataProduct;
 import com.final_project.e_commerce.repository.product.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.lang.model.element.Name;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,19 +30,21 @@ public class ProductServiceImpl implements ProductService {
         this.changeToDomainDataProduct = changeToDomainDataProduct;
     }
 
+    @Cacheable(cacheNames = "getAllProduct", key = "'allProducts'")
     @Override
-    public List<ResponseProductDomainData> getProduct() {
-        List<ProductEntity> productList = productRepository.getProduct();
+    public List<ResponseProductDomainData> getAllProduct() {
+        List<ProductEntity> productList = productRepository.getAllProduct();
         return changeToDomainDataProduct.changeProductEntityToResponseDomainList(productList);
     }
 
-    @Cacheable(cacheNames = "product", key = "#pid")
+    @Cacheable(cacheNames = "getProductById", key = "#pid")
     @Override
     public ResponseProductDomainData getProductById(String pid) {
         ProductEntity productEntity = checkProductWhetherExit(pid);
         return changeToDomainDataProduct.changeProductEntityToResponseDomain(productEntity);
     }
 
+    @Cacheable(cacheNames = "checkProductWhetherExit", key = "#pid")
     @Override
     public ProductEntity checkProductWhetherExit(String pid) {
         Optional<ProductEntity> productById = productRepository.getProductById(pid);
@@ -68,6 +71,11 @@ public class ProductServiceImpl implements ProductService {
 
 
     //    stream method
+    @Caching(evict = {
+            @CacheEvict(cacheNames = "getProductById", allEntries = true),
+            @CacheEvict(cacheNames = "getAllProduct", key = "'allProducts'"),
+            @CacheEvict(cacheNames = "checkProductWhetherExit", allEntries = true)
+    } )
     @Transactional
     @Override
     public void deduceStock(List<CartEntity> cartItemEntityList) {
@@ -79,6 +87,7 @@ public class ProductServiceImpl implements ProductService {
 
         cartItemEntityList.stream().forEach(cartEntity -> {
             cartEntity.getProduct().setStock(cartEntity.getProduct().getStock() - cartEntity.getQuantity());
+            productRepository.save(cartEntity.getProduct());
         });
     }
 }

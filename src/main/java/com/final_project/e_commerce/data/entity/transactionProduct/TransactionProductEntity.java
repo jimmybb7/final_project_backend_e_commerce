@@ -4,6 +4,7 @@ import com.final_project.e_commerce.data.entity.transaction.TransactionEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 indexes = {
         @Index(name = "idx_transaction_product_name", columnList = "name")
 })
-public class TransactionProductEntity {
+public class TransactionProductEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer tpid;

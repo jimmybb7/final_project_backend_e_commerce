@@ -7,10 +7,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
-public class ResponseTransactionProductDomain {
+public class ResponseTransactionProductDomain implements Serializable {
     private Integer tpid;
     private ResponseProductDomainData product;
     private Integer quantity;

@@ -25,8 +25,8 @@ public class ProductController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Result getProducts() {
-        List<ResponseProductDomainData> productlist = productService.getProduct();
+    public Result getAllProducts() {
+        List<ResponseProductDomainData> productlist = productService.getAllProduct();
         List<ResponseAllDtoProduct> responseAllDtoProducts = changeToDtoProduct.changeProductDomainToResponseDtoList(productlist);
         return Result.successWithReturnType("200", responseAllDtoProducts);
     }

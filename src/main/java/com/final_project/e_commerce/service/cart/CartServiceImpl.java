@@ -14,6 +14,8 @@ import com.final_project.e_commerce.service.firebaseUser.FirebaseUserService;
 import com.final_project.e_commerce.service.product.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +38,7 @@ public class CartServiceImpl implements CartService {
         this.changeToCartEntity = changeToCartEntity;
     }
 
-    @Transactional
+    @CacheEvict(cacheNames = {"getFirebaseUserCartItems", "getCartItemEntityListByUid"}, key = "#reqFirebaseUserDomain.email")    @Transactional
     @Override
     public void addCartItems(ReqFirebaseUserDomain reqFirebaseUserDomain, String pid, Integer quantity) {
         FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFirebaseUserDomain);
@@ -62,21 +64,22 @@ public class CartServiceImpl implements CartService {
             throw new InputQuantityInvalidException(quantity);
         }
         if (productEntity.getStock() < quantity) {
-            throw new StockNotEnoughException(quantity,  productEntity.getName());
+            throw new StockNotEnoughException(quantity, productEntity.getName());
         }
         return true;
     }
 
+    @Cacheable(cacheNames = "getFirebaseUserCartItems", key = "#reqFirebaseUserDomain.email")
     @Override
-    public List<ResponseFirebaseUserCartItemDomain> getFirebaseUserCartItems(ReqFirebaseUserDomain reqFireBaseUserDomain) {
-        FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFireBaseUserDomain);
+    public List<ResponseFirebaseUserCartItemDomain> getFirebaseUserCartItems(ReqFirebaseUserDomain reqFirebaseUserDomain) {
+        FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFirebaseUserDomain);
         return cartRepository.getFirebaseUserCartItemByUid(firebaseUserEntity.getUid());
     }
 
-    @Transactional
+    @CacheEvict(cacheNames = {"getFirebaseUserCartItems", "getCartItemEntityListByUid"}, key = "#reqFirebaseUserDomain.email")    @Transactional
     @Override
-    public void updateCartQuantity(ReqFirebaseUserDomain reqFireBaseUserDomain, String pid, Integer quantity) {
-        FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFireBaseUserDomain);
+    public void updateCartQuantity(ReqFirebaseUserDomain reqFirebaseUserDomain, String pid, Integer quantity) {
+        FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFirebaseUserDomain);
         ProductEntity productEntity = productService.checkProductWhetherExit(pid);
         if (checkValidQuantity(productEntity, quantity)) {
             Optional<CartEntity> cartByPidAndUid = cartRepository.getCartByPidAndUid(productEntity.getPid(), firebaseUserEntity.getUid());
@@ -88,6 +91,7 @@ public class CartServiceImpl implements CartService {
         }
     }
 
+    @CacheEvict(cacheNames = {"getFirebaseUserCartItems", "getCartItemEntityListByUid"}, key = "#reqFirebaseUserDomain.email")
     @Transactional
     @Override
     public void deleteSingleCartItem(ReqFirebaseUserDomain reqFirebaseUserDomain, String pid) {
@@ -95,6 +99,7 @@ public class CartServiceImpl implements CartService {
         cartRepository.deleteCartItemByPidAndUid(pid, firebaseUserEntity.getUid());
     }
 
+    @Cacheable(cacheNames = "getCartItemEntityListByUid", key = "#firebaseUserEntity.email")
     @Override
     public List<CartEntity> getCartItemEntityListByUid(FirebaseUserEntity firebaseUserEntity) {
         List<CartEntity> cartItemEntityList = cartRepository.getCartItemEntityListByUid(firebaseUserEntity.getUid());
@@ -104,6 +109,7 @@ public class CartServiceImpl implements CartService {
         return cartItemEntityList;
     }
 
+    @CacheEvict(cacheNames = {"getFirebaseUserCartItems", "getCartItemEntityListByUid"}, key = "#firebaseUserEntity.email")
     @Transactional
     @Override
     public void deleteCartItemByUserId(FirebaseUserEntity firebaseUserEntity) {

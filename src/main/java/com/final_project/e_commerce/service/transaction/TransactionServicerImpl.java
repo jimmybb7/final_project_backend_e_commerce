@@ -19,6 +19,9 @@ import com.final_project.e_commerce.service.product.ProductService;
 import com.final_project.e_commerce.service.transactionProduct.TransactionProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +54,7 @@ public class TransactionServicerImpl implements TransactionService {
         this.productService = productService;
     }
 
+
     @Transactional
     @Override
     public ResponseTransactionDomain createTransaction(ReqFirebaseUserDomain reqFirebaseUserDomain) {
@@ -63,6 +67,7 @@ public class TransactionServicerImpl implements TransactionService {
         return changeToDomainTransaction.transactionEntityChangeToResponseTransactionDomain(savedTransactionEntity, transactionProductEntityList);
     }
 
+    @Cacheable(cacheNames = "getTransaction", key = "#tid")
     @Override
     public ResponseTransactionDomain getTransaction(ReqFirebaseUserDomain reqFirebaseUserDomain, Integer tid) {
         FirebaseUserEntity firebaseUserEntity = firebaseUserService.getFirebaseUserByEmail(reqFirebaseUserDomain);
@@ -75,6 +80,7 @@ public class TransactionServicerImpl implements TransactionService {
         return changeToDomainTransaction.transactionEntityChangeToResponseTransactionDomain(transactionEntity, transactionProductList);
     }
 
+    @CacheEvict(cacheNames = "getTransaction", key = "#tid")
     @Transactional
     @Override
     public void updateTransactionStatusToProcessing(ReqFirebaseUserDomain reqFirebaseUserDomain, Integer tid) {
@@ -90,6 +96,7 @@ public class TransactionServicerImpl implements TransactionService {
         transactionEntity.setStatus(TransactionStatusEnum.PROCESSING);
     }
 
+    @CacheEvict(cacheNames = "getTransaction", key = "#tid")
     @Transactional
     @Override
     public ResponseTransactionDomain updateTransactionStatusToSuccess(ReqFirebaseUserDomain reqFirebaseUserDomain, Integer tid) {
@@ -109,14 +116,4 @@ public class TransactionServicerImpl implements TransactionService {
         List<TransactionProductEntity> transactionProductList = transactionProductService.getTransactionProductByTid(tid);
         return changeToDomainTransaction.transactionEntityChangeToResponseTransactionDomain(transactionEntity, transactionProductList);
     }
-
-
-
-//    public boolean checkTransactionStatus(TransactionEntity  transactionEntity, Integer tid, TransactionStatusEnum  transactionStatus) {
-//        if (transactionEntity.getStatus() != transactionStatus){
-//            logger.warn("tid: {} Transaction status not in {}", tid,  transactionStatus);
-//            throw new TransactionStatusException(tid, transactionStatus);
-//        }
-//        return  true;
-//    }
 }

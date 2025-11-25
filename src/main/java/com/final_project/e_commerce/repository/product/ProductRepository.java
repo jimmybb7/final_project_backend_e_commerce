@@ -13,7 +13,7 @@ public interface ProductRepository extends CrudRepository<ProductEntity,Integer>
             nativeQuery = true,
             value = "select * from product"
     )
-    List<ProductEntity> getProduct();
+    List<ProductEntity> getAllProduct();
 
 
     @Query(

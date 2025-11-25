@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface ProductService {
-    List<ResponseProductDomainData> getProduct();
+    List<ResponseProductDomainData> getAllProduct();
 
     ResponseProductDomainData getProductById(String pid);
 

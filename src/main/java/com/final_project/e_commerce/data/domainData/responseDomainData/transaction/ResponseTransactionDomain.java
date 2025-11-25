@@ -6,12 +6,13 @@ import com.final_project.e_commerce.data.entity.firebaseUser.FirebaseUserEntity;
 import com.final_project.e_commerce.service.transaction.TransactionStatusEnum;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class ResponseTransactionDomain {
+public class ResponseTransactionDomain implements Serializable {
     private Integer tid;
     private Integer buyerUid;
     private LocalDateTime datetime;

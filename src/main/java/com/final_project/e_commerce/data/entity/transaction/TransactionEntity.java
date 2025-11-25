@@ -5,13 +5,14 @@ import com.final_project.e_commerce.service.transaction.TransactionStatusEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @Entity
 @Table(name = "transaction")
-public class TransactionEntity {
+public class TransactionEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer tid;

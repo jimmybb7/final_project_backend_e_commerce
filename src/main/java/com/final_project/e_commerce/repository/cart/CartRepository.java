@@ -22,7 +22,7 @@ public interface CartRepository extends CrudRepository<CartEntity, Integer> {
                     "left join cart_item on firebase_user.uid = cart_item.firebase_user_uid " +
                     "left join product on cart_item.product_pid = product.pid " +
                     "where firebase_user.uid = ?1")
-    List<ResponseFirebaseUserCartItemDomain> getFirebaseUserCartItemByUid(int uid);
+    List<ResponseFirebaseUserCartItemDomain> getFirebaseUserCartItemByUid(Integer uid);
 
 
     @Query(nativeQuery = true,
