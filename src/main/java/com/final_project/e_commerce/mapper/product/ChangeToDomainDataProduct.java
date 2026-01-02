@@ -18,6 +18,7 @@ public class ChangeToDomainDataProduct {
         responseProductDomainData.setStock(productEntity.getStock());
         responseProductDomainData.setPid(productEntity.getPid());
         responseProductDomainData.setImageUrl(productEntity.getImageUrl());
+        responseProductDomainData.setStripePriceId(productEntity.getStripePriceId());
         return responseProductDomainData;
     }
 

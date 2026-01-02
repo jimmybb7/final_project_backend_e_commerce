@@ -41,4 +41,6 @@ public class TransactionProductEntity implements Serializable {
 
     @Column(nullable = false)
     private Integer quantity;
+
+    private String stripePriceId;
 }

@@ -2,10 +2,11 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.7'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.google.cloud.tools.jib' version '3.5.1'
 }
 
 group = 'com.final_project'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 description = 'e_commerce'
 
 java {
@@ -31,11 +32,22 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'com.mysql:mysql-connector-j'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation "com.stripe:stripe-java:31.1.0"
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jib {
+    to{
+        image="docker.io/jimmybb7/project-backend"
+        auth {
+            username = 'jimmybb7'
+            password = 'dckr_pat_-JpUZKzLFPlh4pCqtbhR7xBF0HE'
+        }
+    }
 }

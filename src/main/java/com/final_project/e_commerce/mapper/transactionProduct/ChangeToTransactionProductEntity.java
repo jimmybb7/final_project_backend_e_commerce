@@ -23,6 +23,7 @@ public class ChangeToTransactionProductEntity {
                     transactionProductEntity.setImageUrl(cartEntity.getProduct().getImageUrl());
                     transactionProductEntity.setStock(cartEntity.getProduct().getStock());
                     transactionProductEntity.setQuantity(cartEntity.getQuantity());
+                    transactionProductEntity.setStripePriceId(cartEntity.getProduct().getStripePriceId());
                     return transactionProductEntity;
                 })
                 .toList();

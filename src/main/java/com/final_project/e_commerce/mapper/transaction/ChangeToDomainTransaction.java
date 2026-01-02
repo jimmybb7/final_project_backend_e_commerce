@@ -9,19 +9,18 @@ import com.final_project.e_commerce.mapper.firebaseUser.ChangeToDomainFirebaseUs
 import com.final_project.e_commerce.mapper.transactionProduct.ChangeToDomainTransactionProduct;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class ChangeToDomainTransaction {
-    private final ChangeToDomainFirebaseUser changeToDomainFirebaseUser;
     private final ChangeToDomainTransactionProduct changeToDomainTransactionProduct;
 
-    public ChangeToDomainTransaction(ChangeToDomainFirebaseUser changeToDomainFirebaseUser, ChangeToDomainTransactionProduct changeToDomainTransactionProduct) {
-        this.changeToDomainFirebaseUser = changeToDomainFirebaseUser;
+    public ChangeToDomainTransaction(ChangeToDomainTransactionProduct changeToDomainTransactionProduct) {
         this.changeToDomainTransactionProduct = changeToDomainTransactionProduct;
     }
 
-    public ResponseTransactionDomain transactionEntityChangeToResponseTransactionDomain(TransactionEntity transactionEntity, List<TransactionProductEntity>  transactionProductEntityList) {
+    public ResponseTransactionDomain transactionEntityChangeToResponseTransactionDomain(TransactionEntity transactionEntity, List<TransactionProductEntity> transactionProductEntityList) {
         ResponseTransactionDomain responseTransactionDomain = new ResponseTransactionDomain();
         responseTransactionDomain.setTid(transactionEntity.getTid());
         responseTransactionDomain.setBuyerUid(transactionEntity.getFirebaseUser().getUid());
@@ -31,5 +30,18 @@ public class ChangeToDomainTransaction {
         responseTransactionDomain.setProducts(responseTransactionProductDomainList);
         responseTransactionDomain.setTotal(transactionEntity.getTotal());
         return responseTransactionDomain;
+    }
+
+    public List<ResponseTransactionDomain> transactionEntityListToResponseTransactionDomain(List<TransactionEntity> transactionEntityList) {
+        List<ResponseTransactionDomain> responseTransactionDomainList = transactionEntityList.stream().map(transactionEntity -> {
+            ResponseTransactionDomain responseTransactionDomain = new ResponseTransactionDomain();
+            responseTransactionDomain.setTid(transactionEntity.getTid());
+            responseTransactionDomain.setBuyerUid(transactionEntity.getFirebaseUser().getUid());
+            responseTransactionDomain.setDatetime(transactionEntity.getDatetime());
+            responseTransactionDomain.setStatus(transactionEntity.getStatus());
+            responseTransactionDomain.setTotal(transactionEntity.getTotal());
+            return responseTransactionDomain;
+        }).toList();
+        return responseTransactionDomainList;
     }
 }

@@ -63,4 +63,11 @@ public class GlobalExceptionHandler {
         logger.warn(ex.getMessage());
         return Result.error("500", ex.getMessage());
     }
+
+    @ExceptionHandler(PaymentNotCompletedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result handlePaymentNotCompletedException(PaymentNotCompletedException ex) {
+        logger.warn("stripe payment :{}", ex.getMessage());
+        return Result.error("400", ex.getMessage());
+    }
 }

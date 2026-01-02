@@ -13,5 +13,5 @@ public class ResponseProductDomainData implements Serializable {
     private String imageUrl;
     private String description;
     private Integer stock;
-
+    private String stripePriceId;
 }

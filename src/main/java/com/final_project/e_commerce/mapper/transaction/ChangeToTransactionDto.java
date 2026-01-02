@@ -4,8 +4,6 @@ import com.final_project.e_commerce.data.domainData.responseDomainData.transacti
 import com.final_project.e_commerce.data.domainData.responseDomainData.transactionProduct.ResponseTransactionProductDomain;
 import com.final_project.e_commerce.data.dto.responseDto.transaction.ResponseTransactionDto;
 import com.final_project.e_commerce.data.dto.responseDto.transactionProduct.ResponseTransactionProductDto;
-import com.final_project.e_commerce.data.entity.transaction.TransactionEntity;
-import com.final_project.e_commerce.data.entity.transactionProduct.TransactionProductEntity;
 import com.final_project.e_commerce.mapper.transactionProduct.ChangeToTransactionProductDto;
 import org.springframework.stereotype.Component;
 
@@ -30,5 +28,17 @@ public class ChangeToTransactionDto {
         responseTransactionDto.setProducts(responseTransactionProductDtoList);
         responseTransactionDto.setTotal(responseTransactionDomain.getTotal());
         return responseTransactionDto;
+    }
+
+    public List<ResponseTransactionDto> responseTransactionDomainListToResponseTransactionDtoList(List<ResponseTransactionDomain> responseTransactionDomainList) {
+        return responseTransactionDomainList.stream().map(responseTransactionDomain -> {
+            ResponseTransactionDto responseTransactionDto = new ResponseTransactionDto();
+            responseTransactionDto.setTid(responseTransactionDomain.getTid());
+            responseTransactionDto.setBuyerUid(responseTransactionDomain.getBuyerUid());
+            responseTransactionDto.setDatetime(responseTransactionDomain.getDatetime());
+            responseTransactionDto.setStatus(responseTransactionDomain.getStatus());
+            responseTransactionDto.setTotal(responseTransactionDomain.getTotal());
+            return responseTransactionDto;
+        }).toList();
     }
 }

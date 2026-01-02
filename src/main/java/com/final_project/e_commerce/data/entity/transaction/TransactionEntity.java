@@ -30,4 +30,6 @@ public class TransactionEntity implements Serializable {
 
     @Column(nullable = false)
     private BigDecimal total;
+
+    private String stripeSessionId;
 }

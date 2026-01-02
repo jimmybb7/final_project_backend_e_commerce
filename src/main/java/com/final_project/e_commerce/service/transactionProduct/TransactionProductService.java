@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface TransactionProductService {
     List<TransactionProductEntity> getTransactionProductByTid(Integer tid);
+
 }

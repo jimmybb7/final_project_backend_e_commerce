@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/public/products")
+@CrossOrigin(origins = "http://localhost:5173/")
 public class ProductController {
     private final ProductService productService;
     private final ChangeToDtoProduct changeToDtoProduct;

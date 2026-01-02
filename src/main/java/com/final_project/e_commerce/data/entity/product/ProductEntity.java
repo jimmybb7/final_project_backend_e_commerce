@@ -37,5 +37,7 @@ public class ProductEntity implements Serializable {
     @Column(nullable = false)
     private String updateDateTime;
 
+    private String stripePriceId;
+
 
 }
