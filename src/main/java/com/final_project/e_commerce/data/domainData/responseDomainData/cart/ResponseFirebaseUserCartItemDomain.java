@@ -17,5 +17,6 @@ public class ResponseFirebaseUserCartItemDomain implements Serializable {
     private String imageUrl;
     private Integer cartQuantity;
     private Integer stock;
+    private String nameEn;
 
 }

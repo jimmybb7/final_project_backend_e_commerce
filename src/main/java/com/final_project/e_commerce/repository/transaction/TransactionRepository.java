@@ -1,7 +1,6 @@
 package com.final_project.e_commerce.repository.transaction;
 
 import com.final_project.e_commerce.data.entity.transaction.TransactionEntity;
-import com.final_project.e_commerce.service.transaction.TransactionStatusEnum;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -16,6 +15,6 @@ public interface TransactionRepository extends CrudRepository<TransactionEntity,
 
 
     @Query(nativeQuery = true,
-    value = "select * from transaction where firebase_user_uid = ?1 and status = ?2")
+    value = "select * from transaction where firebase_user_uid = ?1 and status = ?2 order by datetime desc")
     List<TransactionEntity> getUserOrderRecordList(Integer uid, String transactionStatus);
 }

@@ -30,6 +30,7 @@ public class ChangeToDomainTransactionProduct {
         responseProductDomainData.setDescription(transactionProductEntity.getDescription());
         responseProductDomainData.setStock(transactionProductEntity.getStock());
         responseProductDomainData.setStripePriceId(transactionProductEntity.getStripePriceId());
+        responseProductDomainData.setNameEn(transactionProductEntity.getNameEn());
         return responseProductDomainData;
     }
 

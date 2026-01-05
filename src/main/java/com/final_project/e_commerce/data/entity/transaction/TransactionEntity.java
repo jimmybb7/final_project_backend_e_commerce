@@ -1,7 +1,6 @@
 package com.final_project.e_commerce.data.entity.transaction;
 
 import com.final_project.e_commerce.data.entity.firebaseUser.FirebaseUserEntity;
-import com.final_project.e_commerce.service.transaction.TransactionStatusEnum;
 import jakarta.persistence.*;
 import lombok.Data;
 

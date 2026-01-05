@@ -1,5 +1,6 @@
 package com.final_project.e_commerce.data.dto.responseDto.product;
 
+import com.final_project.e_commerce.data.entity.product.ProductCategoryEnum;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,8 +12,7 @@ public class ResponseAllDtoProduct implements Serializable {
     private String name;
     private BigDecimal price;
     private String imageUrl;
-    private String description;
     private Boolean hasStock;
-
-
+    private ProductCategoryEnum  productCategory;
+    private String nameEn;
 }

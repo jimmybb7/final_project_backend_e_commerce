@@ -1,6 +1,7 @@
 package com.final_project.e_commerce.controller.cart;
 
 import com.final_project.e_commerce.common.Result;
+import com.final_project.e_commerce.config.EnvConfig;
 import com.final_project.e_commerce.data.domainData.reqDomainData.firebaseUser.ReqFirebaseUserDomain;
 import com.final_project.e_commerce.data.domainData.responseDomainData.cart.ResponseFirebaseUserCartItemDomain;
 import com.final_project.e_commerce.data.dto.responseDto.cart.ResponseFirebaseUserCartItemDto;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cart/items")
-@CrossOrigin(origins = "http://localhost:5173/")
+@CrossOrigin({EnvConfig.DEV_BASEURL, EnvConfig.PROD_BASEURL})
 public class CartController {
 
     private final ChangeToDomainFirebaseUser changeToDomainFirebaseUser;

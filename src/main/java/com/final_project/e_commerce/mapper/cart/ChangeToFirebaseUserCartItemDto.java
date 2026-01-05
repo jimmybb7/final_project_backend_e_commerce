@@ -17,6 +17,7 @@ public class ChangeToFirebaseUserCartItemDto {
         responseFirebaseUserCartItemDto.setPid(responseFirebaseUserCartItemDomain.getPid());
         responseFirebaseUserCartItemDto.setStock(responseFirebaseUserCartItemDomain.getStock());
         responseFirebaseUserCartItemDto.setImageUrl(responseFirebaseUserCartItemDomain.getImageUrl());
+        responseFirebaseUserCartItemDto.setNameEn(responseFirebaseUserCartItemDomain.getNameEn());
         return responseFirebaseUserCartItemDto;
     }
 

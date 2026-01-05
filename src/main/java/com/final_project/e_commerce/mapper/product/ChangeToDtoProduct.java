@@ -19,6 +19,8 @@ public class ChangeToDtoProduct {
         responseDtoProduct.setPid(responseProductDomainData.getPid());
         responseDtoProduct.setStock(responseProductDomainData.getStock());
         responseDtoProduct.setDescription(responseProductDomainData.getDescription());
+        responseDtoProduct.setNameEn(responseProductDomainData.getNameEn());
+        responseDtoProduct.setDescriptionEn(responseProductDomainData.getDescriptionEn());
         return responseDtoProduct;
     }
 
@@ -41,7 +43,8 @@ public class ChangeToDtoProduct {
         responseAllDtoProduct.setName(responseProductDomainData.getName());
         responseAllDtoProduct.setPrice(responseProductDomainData.getPrice());
         responseAllDtoProduct.setPid(responseProductDomainData.getPid());
-        responseAllDtoProduct.setDescription(responseProductDomainData.getDescription());
+        responseAllDtoProduct.setProductCategory(responseProductDomainData.getProductCategory());
+        responseAllDtoProduct.setNameEn(responseProductDomainData.getNameEn());
         return responseAllDtoProduct;
     }
 }

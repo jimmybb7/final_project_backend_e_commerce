@@ -1,6 +1,7 @@
 package com.final_project.e_commerce.controller.transaction;
 
 import com.final_project.e_commerce.common.Result;
+import com.final_project.e_commerce.config.EnvConfig;
 import com.final_project.e_commerce.data.domainData.reqDomainData.firebaseUser.ReqFirebaseUserDomain;
 import com.final_project.e_commerce.data.domainData.responseDomainData.stripe.ResponseStripeDomain;
 import com.final_project.e_commerce.data.domainData.responseDomainData.transaction.ResponseTransactionDomain;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/transactions")
-@CrossOrigin(origins = "http://localhost:5173/")
+@CrossOrigin({EnvConfig.DEV_BASEURL, EnvConfig.PROD_BASEURL})
 public class TransactionController {
 
     private final ChangeToDomainFirebaseUser changeToDomainFirebaseUser;

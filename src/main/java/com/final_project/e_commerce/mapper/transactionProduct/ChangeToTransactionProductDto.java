@@ -28,6 +28,7 @@ public class ChangeToTransactionProductDto {
         responseDtoProduct.setImageUrl(responseTransactionProductDomain.getProduct().getImageUrl());
         responseDtoProduct.setDescription(responseTransactionProductDomain.getProduct().getDescription());
         responseDtoProduct.setStock(responseTransactionProductDomain.getProduct().getStock());
+        responseDtoProduct.setNameEn(responseTransactionProductDomain.getProduct().getNameEn());
         return responseDtoProduct;
     }
 

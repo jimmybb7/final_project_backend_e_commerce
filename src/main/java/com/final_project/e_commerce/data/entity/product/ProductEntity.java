@@ -20,8 +20,14 @@ public class ProductEntity implements Serializable {
     @Column(unique = true, nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String nameEn;
+
     @Column(length = 1000)
     private String description;
+
+    @Column(length = 1000)
+    private String descriptionEn;
 
     @Column(nullable = false)
     private BigDecimal price;
@@ -37,7 +43,12 @@ public class ProductEntity implements Serializable {
     @Column(nullable = false)
     private String updateDateTime;
 
+    @Column(nullable = false)
     private String stripePriceId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ProductCategoryEnum productCategory;
 
 
 }

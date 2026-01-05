@@ -13,4 +13,6 @@ public class ResponseDtoProduct implements Serializable {
     private String imageUrl;
     private String description;
     private Integer stock;
+    private String nameEn;
+    private String descriptionEn;
 }

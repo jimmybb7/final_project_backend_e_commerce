@@ -1,6 +1,7 @@
 package com.final_project.e_commerce.controller.product;
 
 import com.final_project.e_commerce.common.Result;
+import com.final_project.e_commerce.config.EnvConfig;
 import com.final_project.e_commerce.data.domainData.responseDomainData.product.ResponseProductDomainData;
 import com.final_project.e_commerce.data.dto.responseDto.product.ResponseAllDtoProduct;
 import com.final_project.e_commerce.data.dto.responseDto.product.ResponseDtoProduct;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/public/products")
-@CrossOrigin(origins = "http://localhost:5173/")
+@CrossOrigin({EnvConfig.DEV_BASEURL, EnvConfig.PROD_BASEURL})
 public class ProductController {
     private final ProductService productService;
     private final ChangeToDtoProduct changeToDtoProduct;

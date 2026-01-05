@@ -3,7 +3,7 @@ package com.final_project.e_commerce.mapper.transaction;
 import com.final_project.e_commerce.data.entity.cart.CartEntity;
 import com.final_project.e_commerce.data.entity.firebaseUser.FirebaseUserEntity;
 import com.final_project.e_commerce.data.entity.transaction.TransactionEntity;
-import com.final_project.e_commerce.service.transaction.TransactionStatusEnum;
+import com.final_project.e_commerce.data.entity.transaction.TransactionStatusEnum;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

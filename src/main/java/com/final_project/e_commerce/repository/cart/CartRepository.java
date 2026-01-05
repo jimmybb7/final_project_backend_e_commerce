@@ -17,7 +17,7 @@ public interface CartRepository extends CrudRepository<CartEntity, Integer> {
 
 
     @Query(nativeQuery = true,
-            value = "select product.pid, product.name, product.price, product.image_url, cart_item.quantity, product.stock" +
+            value = "select product.pid, product.name, product.price, product.image_url, cart_item.quantity, product.stock, product.name_en" +
                     " from firebase_user " +
                     "left join cart_item on firebase_user.uid = cart_item.firebase_user_uid " +
                     "left join product on cart_item.product_pid = product.pid " +

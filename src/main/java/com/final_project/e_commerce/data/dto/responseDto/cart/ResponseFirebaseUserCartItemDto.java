@@ -13,4 +13,5 @@ public class ResponseFirebaseUserCartItemDto implements Serializable {
     private String imageUrl;
     private Integer cartQuantity;
     private Integer stock;
+    private String nameEn;
 }

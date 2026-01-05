@@ -24,6 +24,7 @@ public class ChangeToTransactionProductEntity {
                     transactionProductEntity.setStock(cartEntity.getProduct().getStock());
                     transactionProductEntity.setQuantity(cartEntity.getQuantity());
                     transactionProductEntity.setStripePriceId(cartEntity.getProduct().getStripePriceId());
+                    transactionProductEntity.setNameEn(cartEntity.getProduct().getNameEn());
                     return transactionProductEntity;
                 })
                 .toList();

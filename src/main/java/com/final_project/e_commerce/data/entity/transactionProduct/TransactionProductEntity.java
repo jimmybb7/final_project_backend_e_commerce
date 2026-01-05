@@ -43,4 +43,6 @@ public class TransactionProductEntity implements Serializable {
     private Integer quantity;
 
     private String stripePriceId;
+
+    private String nameEn;
 }
