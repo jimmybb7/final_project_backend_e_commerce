@@ -7,6 +7,7 @@ import com.final_project.e_commerce.data.dto.responseDto.product.ResponseAllDtoP
 import com.final_project.e_commerce.data.dto.responseDto.product.ResponseDtoProduct;
 import com.final_project.e_commerce.mapper.product.ChangeToDtoProduct;
 import com.final_project.e_commerce.service.product.ProductService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,10 +28,13 @@ public class ProductController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Result getAllProducts() {
-        List<ResponseProductDomainData> productlist = productService.getAllProduct();
-        List<ResponseAllDtoProduct> responseAllDtoProducts = changeToDtoProduct.changeProductDomainToResponseDtoList(productlist);
-        return Result.successWithReturnType("200", responseAllDtoProducts);
+    public Result getAllProducts(@RequestParam(required = false) String keyword,
+                                 @RequestParam(required = false) String category,
+                                 @RequestParam(defaultValue = "1") Integer pageNum,
+                                 @RequestParam(defaultValue = "zh") String language) {
+        Page<ResponseProductDomainData> responseProductDomainDataPageList = productService.getAllProduct(keyword, category, language, pageNum);
+        Page<ResponseAllDtoProduct> responseAllDtoProductPageListZ = responseProductDomainDataPageList.map(responseProductDomainData -> changeToDtoProduct.changeProductDomainToResponseDtoForList(responseProductDomainData));
+        return Result.successWithReturnType("200", responseAllDtoProductPageListZ);
     }
 
     @GetMapping("/{id}")

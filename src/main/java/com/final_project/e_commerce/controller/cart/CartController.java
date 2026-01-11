@@ -55,13 +55,6 @@ public class CartController {
         return Result.successNoReturnType("204");
     }
 
-//    @DeleteMapping("{pid}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void deleteCartItem(@AuthenticationPrincipal Jwt jwt, @PathVariable String pid) {
-//        ReqFirebaseUserDomain reqFirebaseUserDomain = changeToDomainFirebaseUser.changeJwtToReqDomainFirebaseUser(jwt);
-//        cartService.deleteSingleCartItem(reqFirebaseUserDomain, pid);
-//    }
-
     @DeleteMapping("{pid}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Result deleteCartItem(@AuthenticationPrincipal Jwt jwt, @PathVariable String pid) {

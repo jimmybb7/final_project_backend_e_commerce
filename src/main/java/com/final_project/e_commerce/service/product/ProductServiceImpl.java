@@ -7,11 +7,12 @@ import com.final_project.e_commerce.exception.ProductNotFoundException;
 import com.final_project.e_commerce.exception.StockNotEnoughException;
 import com.final_project.e_commerce.mapper.product.ChangeToDomainDataProduct;
 import com.final_project.e_commerce.repository.product.ProductRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,6 @@ import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    private final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     private final ProductRepository productRepository;
     private final ChangeToDomainDataProduct changeToDomainDataProduct;
@@ -30,11 +30,23 @@ public class ProductServiceImpl implements ProductService {
         this.changeToDomainDataProduct = changeToDomainDataProduct;
     }
 
-    @Cacheable(cacheNames = "getAllProduct", key = "'allProducts'")
+    @Cacheable(cacheNames = "getAllProduct", key = "'allProducts_'+#keyword+'_'+#category+'_'+#language+'_'+#pageNum")
     @Override
-    public List<ResponseProductDomainData> getAllProduct() {
-        List<ProductEntity> productList = productRepository.getAllProduct();
-        return changeToDomainDataProduct.changeProductEntityToResponseDomainList(productList);
+    public Page<ResponseProductDomainData> getAllProduct(String keyword, String category, String language, Integer pageNum) {
+        if ("ALL".equals(category)) {
+            category = null;
+        }
+        if (pageNum <= 0) {
+            pageNum = 1;
+        }
+        Pageable pageable = PageRequest.of(pageNum - 1, 10);
+        if (language.equals("zh")) {
+            Page<ProductEntity> allProductZh = productRepository.getAllProductZh(keyword, category, pageable);
+            return allProductZh.map(productEntity -> changeToDomainDataProduct.changeProductEntityToResponseDomain(productEntity));
+        } else {
+            Page<ProductEntity> allProductEn = productRepository.getAllProductEn(keyword, category, pageable);
+            return allProductEn.map(productEntity -> changeToDomainDataProduct.changeProductEntityToResponseDomain(productEntity));
+        }
     }
 
     @Cacheable(cacheNames = "getProductById", key = "#pid")
@@ -73,9 +85,9 @@ public class ProductServiceImpl implements ProductService {
     //    stream method
     @Caching(evict = {
             @CacheEvict(cacheNames = "getProductById", allEntries = true),
-            @CacheEvict(cacheNames = "getAllProduct", key = "'allProducts'"),
+            @CacheEvict(cacheNames = "getAllProduct", allEntries = true),
             @CacheEvict(cacheNames = "checkProductWhetherExit", allEntries = true)
-    } )
+    })
     @Transactional
     @Override
     public void deduceStock(List<CartEntity> cartItemEntityList) {
