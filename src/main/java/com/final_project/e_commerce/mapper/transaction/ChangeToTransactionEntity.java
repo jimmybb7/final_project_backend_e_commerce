@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Component
@@ -16,7 +18,10 @@ public class ChangeToTransactionEntity {
     public TransactionEntity changeToTransactionEntity(FirebaseUserEntity firebaseUserEntity,List<CartEntity> cartItemEntityList) {
         TransactionEntity transactionEntity = new TransactionEntity();
         transactionEntity.setFirebaseUser(firebaseUserEntity);
-        transactionEntity.setDatetime(LocalDateTime.now());
+        ZoneId hongkongZoneId = ZoneId.of("Asia/Hong_Kong");
+        ZonedDateTime hongkongZoneDateTime = ZonedDateTime.now(hongkongZoneId);
+        LocalDateTime hongkongZoneDateTimeLocalDateTime = hongkongZoneDateTime.toLocalDateTime();
+        transactionEntity.setDatetime(hongkongZoneDateTimeLocalDateTime);
         transactionEntity.setStatus(TransactionStatusEnum.PREPARE);
 
         BigDecimal total = cartItemEntityList.stream()

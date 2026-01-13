@@ -36,6 +36,9 @@ public class ProductServiceImpl implements ProductService {
         if ("ALL".equals(category)) {
             category = null;
         }
+        if("".equals(keyword)) {
+            keyword = null;
+        }
         if (pageNum <= 0) {
             pageNum = 1;
         }
