@@ -42,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
         if (pageNum <= 0) {
             pageNum = 1;
         }
-        Pageable pageable = PageRequest.of(pageNum - 1, 10);
+        Pageable pageable = PageRequest.of(pageNum - 1, 12);
         if (language.equals("zh")) {
             Page<ProductEntity> allProductZh = productRepository.getAllProductZh(keyword, category, pageable);
             return allProductZh.map(productEntity -> changeToDomainDataProduct.changeProductEntityToResponseDomain(productEntity));
