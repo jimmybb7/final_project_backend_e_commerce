@@ -29,7 +29,7 @@ public class StripeServiceImpl implements StripeService {
     @Override
     public String creatStripePaymentSession(TransactionEntity transactionEntity) throws StripeException {
         Stripe.apiKey = "sk_test_51Sh2rmRTJa0i8snxYC9LkrxS7tfxUpMAvqhw2f3IefkXHhtrae3euxbpYLwpAL14Ig2zeAOF8DEF29YAIEOEi4x600u4gQzcgg";
-        String YOUR_DOMAIN = EnvConfig.DEV_BASEURL;
+        String YOUR_DOMAIN = EnvConfig.PROD_BASEURL;
 
         List<TransactionProductEntity> transactionProductListByTid = transactionProductService.getTransactionProductByTid(transactionEntity.getTid());
         ResponseTransactionDomain responseTransactionDomain = changeToDomainTransaction.transactionEntityChangeToResponseTransactionDomain(transactionEntity, transactionProductListByTid);
