@@ -47,7 +47,7 @@ jib {
         image="docker.io/jimmybb7/project-backend"
         auth {
             username = 'jimmybb7'
-            password = 'dckr_pat_-JpUZKzLFPlh4pCqtbhR7xBF0HE'
+            password = 'dckr_pat_UH5ghnRO1JWbFriQ3t4G2Z1mu9o'
         }
     }
 }
